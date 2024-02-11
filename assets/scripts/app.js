@@ -11,15 +11,41 @@ const confirmAddMovieButtonEl = addMovieModalEl.querySelector('.btn--success');
 const backdropEl = document.getElementById('backdrop');
 
 // input
-// const inputTitleEl = document.getElementById('title');
-// const inputImageUrlEl = document.getElementById('image-url');
-// const inputRatingEl = document.getElementById('rating');
 const inputEls = document.querySelectorAll('input');
+
+// etc
+const entryTextEl = document.getElementById('entry-text');
 
 // ---------- variables ----------
 const movies = [];
 
 // ---------- handlers ----------
+const updateUI = () => {
+  if (movies.length === 0) {
+    entryTextEl.style.display = 'block';
+  } else {
+    entryTextEl.style.display = 'none';
+  }
+};
+
+const renderNewMovieElement = (title, imageUrl, rating) => {
+  const newMovieEl = document.createElement('li');
+
+  newMovieEl.className = 'movie-element';
+  newMovieEl.innerHTML = `
+    <div class="movie-element__image">
+      <img src="${imageUrl}" alt="${title}"/>
+    </div>
+    <div class="movie-element__info">
+      <h2>${title}</h2>
+      <p>${rating}/5 stars</p>
+    </div>
+  `;
+
+  const movieListEl = document.getElementById('movie-list');
+  movieListEl.append(newMovieEl);
+};
+
 const toggleBackdrop = () => {
   backdropEl.classList.toggle('visible');
 };
@@ -31,6 +57,7 @@ const toggleMovieModal = () => {
 
 const backdropClickHandler = () => {
   toggleMovieModal();
+  clearMovieInput();
 };
 
 const clearMovieInput = () => {
@@ -70,6 +97,8 @@ const addMovieHandler = () => {
   console.log(movies);
   toggleMovieModal();
   clearMovieInput();
+  renderNewMovieElement(newMovie.title, newMovie.image, newMovie.rating);
+  updateUI();
 };
 
 // ---------- event listeners ----------
